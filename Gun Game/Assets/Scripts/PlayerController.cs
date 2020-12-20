@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Vector3 targetPos;
-    public float tileLength = 1.1f;
-    public float speed = 5f;
-    public bool isMoving;
+    private float tileLength = 1.1f;
+    private float speed = 5f;
+    private bool isMoving;
     Rigidbody2D rb;
 
     // Start is called before the first frame update
@@ -22,35 +22,78 @@ public class PlayerController : MonoBehaviour
         if (!isMoving)
         {
             isMoving = true;
-            float xmov = Input.GetAxisRaw("Horizontal");
-            float ymov = Input.GetAxisRaw("Vertical");
 
-            if (xmov < 0 && ymov < 0)
+            if (Input.GetKey(KeyCode.UpArrow))
             {
-                targetPos = new Vector3(transform.position.x - tileLength, transform.position.y - tileLength, 0);
+                targetPos = new Vector3(transform.position.x, transform.position.y + tileLength, 0);
+                StartCoroutine(MovePlayer(targetPos, "up"));
             }
 
-            if (xmov < 0 && ymov > 0)
+            if (Input.GetKey(KeyCode.DownArrow))
             {
-                targetPos = new Vector3(transform.position.x - tileLength, transform.position.y + tileLength, 0);
+                targetPos = new Vector3(transform.position.x, transform.position.y - tileLength, 0);
+                StartCoroutine(MovePlayer(targetPos, "down"));
             }
 
-            if (xmov > 0 && ymov < 0)
+            if (Input.GetKey(KeyCode.LeftArrow))
             {
-                targetPos = new Vector3(transform.position.x + tileLength, transform.position.y - tileLength, 0);
+                targetPos = new Vector3(transform.position.x - tileLength, transform.position.y, 0);
+                StartCoroutine(MovePlayer(targetPos, "left"));
             }
 
-            if (xmov > 0 && ymov > 0)
+            if (Input.GetKey(KeyCode.RightArrow))
             {
-                targetPos = new Vector3(transform.position.x + tileLength, transform.position.y + tileLength, 0);
+                targetPos = new Vector3(transform.position.x + tileLength, transform.position.y, 0);
+                StartCoroutine(MovePlayer(targetPos, "right"));
             }
 
-            while (transform.position != targetPos)
-            {
-                rb.velocity = new Vector3(xmov * speed, ymov * speed, 0);
-            }
+            Debug.Log("stopped");
+            isMoving = false;
+            rb.velocity = new Vector3(0, 0, 0);
         }
+    }
 
-        isMoving = false;
+    private IEnumerator MovePlayer(Vector3 tPos, string direc)
+    {
+        while (transform.position != tPos)
+        {
+            if (direc == "up")
+            {
+                Debug.Log(tPos);
+                rb.velocity = new Vector3(0, speed, 0);
+                if (transform.position.y > tPos.y)
+                {
+                    Debug.Log("test");
+                    rb.velocity = new Vector3(0, 0, 0);
+                    transform.position = tPos;
+                }
+            } else if (direc == "down")
+            {
+                rb.velocity = new Vector3(0, -speed, 0);
+                if (transform.position.y < tPos.y)
+                {
+                    rb.velocity = new Vector3(0, 0, 0);
+                    transform.position = tPos;
+                }
+            } else if (direc == "left")
+            {
+                rb.velocity = new Vector3(-speed, 0, 0);
+                if (transform.position.x < tPos.x)
+                {
+                    rb.velocity = new Vector3(0, 0, 0);
+                    transform.position = tPos;
+                }
+            } else if (direc == "right")
+            {
+                rb.velocity = new Vector3(speed, 0, 0);
+                if (transform.position.x > tPos.x)
+                {
+                    rb.velocity = new Vector3(0, 0, 0);
+                    transform.position = tPos;
+                }
+            }
+
+            yield return null;
+        }
     }
 }
