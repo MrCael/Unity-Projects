@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public float x_start, y_start;
-    public int columnLength, rowLength;
-    public float x_space, y_space;
     public GameObject prefab;
-
+    private int x_start = -4, y_start = 4;
+    private int columnLength = 8, rowLength = 8;
+    private float x_space = 1.11f, y_space = 1.11f;
     // Start is called before the first frame update
     void Start()
     {
