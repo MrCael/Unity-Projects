@@ -4,96 +4,74 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public Vector3 targetPos;
+    public GameObject basicBullet;
+    public GameObject heavyBullet;
+    public GameObject teleportBullet;
+    public GameObject timeBullet;
+    private bool canMove = true;
     private float tileLength = 1.1f;
-    private float speed = 5f;
-    private bool isMoving;
-    Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isMoving)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && canMove)
         {
-            isMoving = true;
+            transform.position = new Vector3(transform.position.x, transform.position.y + tileLength, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow) && canMove)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y - tileLength, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) && canMove)
+        {
+            transform.position = new Vector3(transform.position.x - tileLength, transform.position.y, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow) && canMove)
+        {
+            transform.position = new Vector3(transform.position.x + tileLength, transform.position.y, 0);
+        }
 
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                targetPos = new Vector3(transform.position.x, transform.position.y + tileLength, 0);
-                StartCoroutine(MovePlayer(targetPos, "up"));
-            }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Instantiate(basicBullet, transform.position, transform.rotation);
+            StartCoroutine(DelayMove(0.2f));
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Instantiate(heavyBullet, transform.position, transform.rotation);
+            StartCoroutine(DelayMove(0.2f));
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Instantiate(teleportBullet, transform.position, transform.rotation);
+            StartCoroutine(DelayMove(0.2f));
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Instantiate(timeBullet, transform.position, transform.rotation);
+            StartCoroutine(DelayMove(0.2f));
+        }
 
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                targetPos = new Vector3(transform.position.x, transform.position.y - tileLength, 0);
-                StartCoroutine(MovePlayer(targetPos, "down"));
-            }
-
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                targetPos = new Vector3(transform.position.x - tileLength, transform.position.y, 0);
-                StartCoroutine(MovePlayer(targetPos, "left"));
-            }
-
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                targetPos = new Vector3(transform.position.x + tileLength, transform.position.y, 0);
-                StartCoroutine(MovePlayer(targetPos, "right"));
-            }
-
-            Debug.Log("stopped");
-            isMoving = false;
-            rb.velocity = new Vector3(0, 0, 0);
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z + 90);
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z - 90);
         }
     }
 
-    private IEnumerator MovePlayer(Vector3 tPos, string direc)
+    public IEnumerator DelayMove(float time)
     {
-        while (transform.position != tPos)
-        {
-            if (direc == "up")
-            {
-                Debug.Log(tPos);
-                rb.velocity = new Vector3(0, speed, 0);
-                if (transform.position.y > tPos.y)
-                {
-                    Debug.Log("test");
-                    rb.velocity = new Vector3(0, 0, 0);
-                    transform.position = tPos;
-                }
-            } else if (direc == "down")
-            {
-                rb.velocity = new Vector3(0, -speed, 0);
-                if (transform.position.y < tPos.y)
-                {
-                    rb.velocity = new Vector3(0, 0, 0);
-                    transform.position = tPos;
-                }
-            } else if (direc == "left")
-            {
-                rb.velocity = new Vector3(-speed, 0, 0);
-                if (transform.position.x < tPos.x)
-                {
-                    rb.velocity = new Vector3(0, 0, 0);
-                    transform.position = tPos;
-                }
-            } else if (direc == "right")
-            {
-                rb.velocity = new Vector3(speed, 0, 0);
-                if (transform.position.x > tPos.x)
-                {
-                    rb.velocity = new Vector3(0, 0, 0);
-                    transform.position = tPos;
-                }
-            }
-
-            yield return null;
-        }
+        canMove = false;
+        yield return new WaitForSeconds(time);
+        canMove = true;
     }
 }

@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 4dc4d74378246407ab09f56a0825a967, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -115,7 +115,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb321efeab26e4cbd9d5e35dd71012fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPos: {x: 0, y: 0, z: 0}
-  tileLength: 1.1
-  speed: 5
-  isMoving: 0
+  basicBullet: {fileID: 8414238901897433457, guid: 60eb94b540c74476aa29edab46b66f02,
+    type: 3}
+  heavyBullet: {fileID: 8244878343173052857, guid: 8773f5afa03f0440f80d8c86aa72f61e,
+    type: 3}
+  teleportBullet: {fileID: 7298095126094123809, guid: d125c1fae576a472d95482822e535fc2,
+    type: 3}
+  timeBullet: {fileID: 3852773307929275537, guid: 29cee3ff68b014e79b494d3a2c80fec6,
+    type: 3}

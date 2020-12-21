@@ -200,6 +200,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1206328760062951611, guid: 9428ab1109616468fb3663cec4dc5045, type: 3}
+  enemy: {fileID: 5868413005470843835, guid: ca3ba36e7d4c24a47ba7f377e48ecc1f, type: 3}
+  wall: {fileID: 0}
 --- !u!4 &47273636
 Transform:
   m_ObjectHideFlags: 0
