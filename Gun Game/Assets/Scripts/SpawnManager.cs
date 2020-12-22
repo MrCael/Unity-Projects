@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject player;
     public GameObject enemy;
     public GameObject wall;
+    public GameObject crate;
     public List<Vector3> occupied = new List<Vector3>();
 
     // Start is called before the first frame update
@@ -17,10 +18,12 @@ public class SpawnManager : MonoBehaviour
         Instantiate(wall, new Vector3(-4, 3.77f, 0), Quaternion.identity);
         Instantiate(wall, new Vector3(-2.89f, 3.77f, 0), Quaternion.identity);
         Instantiate(wall, new Vector3(-1.78f, 3.77f, 0), Quaternion.identity);
+        Instantiate(crate, new Vector3(3.77f, -0.67f, 0), Quaternion.identity);
         occupied.Add(new Vector3(3.77f, 3.77f, 0));
         occupied.Add(new Vector3(-4, 3.77f, 0));
         occupied.Add(new Vector3(-2.89f, 3.77f, 0));
         occupied.Add(new Vector3(-1.78f, 3.77f, 0));
+        occupied.Add(new Vector3(3.77f, -0.67f, 0));
     }
 
     // Update is called once per frame

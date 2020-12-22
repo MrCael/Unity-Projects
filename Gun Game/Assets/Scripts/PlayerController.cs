@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public SpawnManager spawnManagerScript;
+
     public GameObject basicBullet;
     public GameObject heavyBullet;
     public GameObject teleportBullet;
     public GameObject timeBullet;
+    private SpawnManager spawnManagerScript;
+    private TeleportManager teleportManagerScript;
     private bool canMove = true;
     private bool noWall = true;
     private float tileLength = 1.11f;
@@ -17,24 +19,25 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         spawnManagerScript = GameObject.Find("Game Manager").GetComponent<SpawnManager>();
+        teleportManagerScript = GameObject.Find("Teleport Manager").GetComponent<TeleportManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && canMove && checkForWall(new Vector3(transform.position.x, transform.position.y + tileLength, 0)) && transform.position.y + tileLength <= 4.88f)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && canMove && checkForObstruction(new Vector3(transform.position.x, transform.position.y + tileLength, 0)) && transform.position.y + tileLength <= 4.01f)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y + tileLength, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) && canMove && checkForWall(new Vector3(transform.position.x, transform.position.y - tileLength, 0)) && transform.position.y - tileLength >= -4.88f)
+        else if (Input.GetKeyDown(KeyCode.DownArrow) && canMove && checkForObstruction(new Vector3(transform.position.x, transform.position.y - tileLength, 0)) && transform.position.y - tileLength >= -4.01f)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y - tileLength, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) && canMove && checkForWall(new Vector3(transform.position.x - tileLength, transform.position.y, 0)) && transform.position.x - tileLength >= -4f)
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) && canMove && checkForObstruction(new Vector3(transform.position.x - tileLength, transform.position.y, 0)) && transform.position.x - tileLength >= -3.87f)
         {
             transform.position = new Vector3(transform.position.x - tileLength, transform.position.y, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && canMove && checkForWall(new Vector3(transform.position.x + tileLength, transform.position.y, 0)) && transform.position.x + tileLength <= 4f)
+        else if (Input.GetKeyDown(KeyCode.RightArrow) && canMove && checkForObstruction(new Vector3(transform.position.x + tileLength, transform.position.y, 0)) && transform.position.x + tileLength <= 3.87f)
         {
             transform.position = new Vector3(transform.position.x + tileLength, transform.position.y, 0);
         }
@@ -62,11 +65,25 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z + 90);
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90);
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180);
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z - 90);
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270);
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+        }
+
+        if (teleportManagerScript.teleport)
+        {
+            transform.position = teleportManagerScript.pos;
+            teleportManagerScript.teleport = false;
         }
     }
 
@@ -77,7 +94,7 @@ public class PlayerController : MonoBehaviour
         canMove = true;
     }
 
-    public bool checkForWall(Vector3 nextPos)
+    public bool checkForObstruction(Vector3 nextPos)
     {
         for (int i = 0; i < spawnManagerScript.occupied.Count; i++)
         {

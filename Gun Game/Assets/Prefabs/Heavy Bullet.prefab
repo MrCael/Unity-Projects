@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 2350082867998406889}
   - component: {fileID: 7245071699975052970}
   - component: {fileID: 4341413813198114592}
+  - component: {fileID: 6164618188079921742}
   - component: {fileID: -4186259764926934185}
   m_Layer: 0
   m_Name: Heavy Bullet
-  m_TagString: Untagged
+  m_TagString: bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,7 +72,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 85c13c308d72d42de88545f9a23c7a22, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 45b35561c3d5c4997ac68f7e27d31735, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -90,7 +91,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8244878343173052857}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -103,6 +104,32 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!61 &6164618188079921742
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8244878343173052857}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.00000011920929, y: 0.0027253628}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.56, y: 2.56}
+    newSize: {x: 2.56, y: 2.56}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.6521112, y: 0.97372675}
+  m_EdgeRadius: 0
 --- !u!114 &-4186259764926934185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,3 +142,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b5e8aa9149f4a8cbdbaf84df3c5854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1206328760062951611, guid: 9428ab1109616468fb3663cec4dc5045, type: 3}
+  bulletType: heavy

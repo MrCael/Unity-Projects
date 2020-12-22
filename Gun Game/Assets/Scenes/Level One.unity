@@ -246,6 +246,7 @@ MonoBehaviour:
   player: {fileID: 1206328760062951611, guid: 9428ab1109616468fb3663cec4dc5045, type: 3}
   enemy: {fileID: 5868413005470843835, guid: ca3ba36e7d4c24a47ba7f377e48ecc1f, type: 3}
   wall: {fileID: 8122626696646565970, guid: 78136f595639d46a88c14f28768b0426, type: 3}
+  crate: {fileID: 2848473135438123874, guid: 380b42aca973046748de339f9a813a32, type: 3}
   occupied: []
 --- !u!4 &47273636
 Transform:
@@ -261,6 +262,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &260388049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 260388050}
+  - component: {fileID: 260388051}
+  m_Layer: 0
+  m_Name: Teleport Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &260388050
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260388049}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0035275035, y: -0.94325984, z: -1.5740308}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &260388051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260388049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7462287d58a574b1a9c80c8591c38af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleport: 0
+  pos: {x: 0, y: 0, z: 0}
 --- !u!1 &872381079
 GameObject:
   m_ObjectHideFlags: 0
