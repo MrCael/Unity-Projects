@@ -1,18 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-
     public GameObject basicBullet;
     public GameObject heavyBullet;
     public GameObject teleportBullet;
+    public TextMeshProUGUI actionsText;
     private SpawnManager spawnManagerScript;
     private TeleportManager teleportManagerScript;
     private bool canMove = true;
     private bool noWall = true;
-    private bool allDead;
     private int count;
     private float tileLength = 1.11f;
 
@@ -21,82 +21,102 @@ public class PlayerController : MonoBehaviour
     {
         spawnManagerScript = GameObject.Find("Game Manager").GetComponent<SpawnManager>();
         teleportManagerScript = GameObject.Find("Teleport Manager").GetComponent<TeleportManager>();
+        actionsText = GameObject.Find("Actions Text").GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && canMove && checkForObstruction(new Vector3(transform.position.x, transform.position.y + tileLength, 0)) && transform.position.y + tileLength <= 4.01f)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y + tileLength, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) && canMove && checkForObstruction(new Vector3(transform.position.x, transform.position.y - tileLength, 0)) && transform.position.y - tileLength >= -4.01f)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y - tileLength, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) && canMove && checkForObstruction(new Vector3(transform.position.x - tileLength, transform.position.y, 0)) && transform.position.x - tileLength >= -4.01f)
-        {
-            transform.position = new Vector3(transform.position.x - tileLength, transform.position.y, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && canMove && checkForObstruction(new Vector3(transform.position.x + tileLength, transform.position.y, 0)) && transform.position.x + tileLength <= 3.87f)
-        {
-            transform.position = new Vector3(transform.position.x + tileLength, transform.position.y, 0);
-        }
+        actionsText.text = "Actions: " + spawnManagerScript.actions.ToString();
 
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    Instantiate(basicBullet, transform.position, transform.rotation);
-        //    StartCoroutine(DelayMove(0.2f));
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    Instantiate(heavyBullet, transform.position, transform.rotation);
-        //    StartCoroutine(DelayMove(0.2f));
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Alpha3))
-        //{
-        //    Instantiate(teleportBullet, transform.position, transform.rotation);
-        //    StartCoroutine(DelayMove(0.2f));
-        //}
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (spawnManagerScript.actions > 0)
         {
-            count = 0;
-            for (int i = 0; i < spawnManagerScript.enemies.Count; i++)
+            if (Input.GetKeyDown(KeyCode.UpArrow) && canMove && checkForObstruction(new Vector3(transform.position.x, transform.position.y + tileLength, 0)) && transform.position.y + tileLength <= 4.01f)
             {
-                if (spawnManagerScript.enemies[i] == null)
+                spawnManagerScript.actions -= 1;
+                checkIfLost();
+                transform.position = new Vector3(transform.position.x, transform.position.y + tileLength, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow) && canMove && checkForObstruction(new Vector3(transform.position.x, transform.position.y - tileLength, 0)) && transform.position.y - tileLength >= -4.01f)
+            {
+                spawnManagerScript.actions -= 1;
+                checkIfLost();
+                transform.position = new Vector3(transform.position.x, transform.position.y - tileLength, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow) && canMove && checkForObstruction(new Vector3(transform.position.x - tileLength, transform.position.y, 0)) && transform.position.x - tileLength >= -4.01f)
+            {
+                spawnManagerScript.actions -= 1;
+                checkIfLost();
+                transform.position = new Vector3(transform.position.x - tileLength, transform.position.y, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow) && canMove && checkForObstruction(new Vector3(transform.position.x + tileLength, transform.position.y, 0)) && transform.position.x + tileLength <= 3.87f)
+            {
+                spawnManagerScript.actions -= 1;
+                checkIfLost();
+                transform.position = new Vector3(transform.position.x + tileLength, transform.position.y, 0);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                spawnManagerScript.actions -= 1;
+                for (int i = 0; i < spawnManagerScript.bullets.Count; i++)
                 {
-                    count++;
+                    if (spawnManagerScript.bullets[i] != null)
+                    {
+                        Destroy(spawnManagerScript.bullets[i]);
+                        break;
+                    }
+                }
+
+                count = 0;
+                for (int i = 0; i < spawnManagerScript.enemies.Count; i++)
+                {
+                    if (spawnManagerScript.enemies[i] == null)
+                    {
+                        count++;
+                    }
+                }
+
+                if (spawnManagerScript.enemies.Count == count && transform.position == spawnManagerScript.endPos && spawnManagerScript.actions == 0)
+                {
+                    Debug.Log("You won!"); // Next level action
+                }
+                else
+                {
+                    checkIfLost();
                 }
             }
 
-            if (spawnManagerScript.enemies.Count == count && transform.position == spawnManagerScript.endPos)
+            if (Input.GetKeyDown(KeyCode.A) && !(transform.eulerAngles == new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90)))
             {
-                Debug.Log("You won!");
+                spawnManagerScript.actions -= 1;
+                checkIfLost();
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90);
             }
-        }
+            else if (Input.GetKeyDown(KeyCode.S) && !(transform.eulerAngles == new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180)))
+            {
+                spawnManagerScript.actions -= 1;
+                checkIfLost();
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180);
+            }
+            else if (Input.GetKeyDown(KeyCode.D) && !(transform.eulerAngles == new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270)))
+            {
+                spawnManagerScript.actions -= 1;
+                checkIfLost();
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270);
+            }
+            else if (Input.GetKeyDown(KeyCode.W) && !(transform.eulerAngles == new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0)))
+            {
+                spawnManagerScript.actions -= 1;
+                checkIfLost();
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+            }
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 90);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 180);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 270);
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
-        }
-
-        if (teleportManagerScript.teleport)
-        {
-            transform.position = teleportManagerScript.pos;
-            teleportManagerScript.teleport = false;
+            if (teleportManagerScript.teleport)
+            {
+                transform.position = teleportManagerScript.pos;
+                teleportManagerScript.teleport = false;
+            }
         }
     }
 
@@ -122,5 +142,13 @@ public class PlayerController : MonoBehaviour
         }
 
         return noWall;
+    }
+
+    public void checkIfLost()
+    {
+        if ((transform.position != spawnManagerScript.endPos && spawnManagerScript.actions < 1) || spawnManagerScript.actions < 1)
+        {
+            Debug.Log("You lost");
+        }
     }
 }

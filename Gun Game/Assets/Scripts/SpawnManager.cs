@@ -19,8 +19,10 @@ public class SpawnManager : MonoBehaviour
     public Quaternion endRot;
     public List<Vector3> occupied = new List<Vector3>();
     public List<GameObject> enemies = new List<GameObject>();
-    public List<string> bullets = new List<string>();
+    public List<GameObject> bullets = new List<GameObject>();
+    public List<string> bulletNames = new List<string>();
     public GridManager gridManagerScript;
+    public int actions;
 
     // Start is called before the first frame update
     void Start()
@@ -38,30 +40,32 @@ public class SpawnManager : MonoBehaviour
         {
             enemies.Add(item);
         }
-        bullets.Add("Basic");
-        bullets.Add("Basic");
-        bullets.Add("Time");
-        for (int i = 0; i < bullets.Count; i++)
+        bulletNames.Add("Time");
+        for (int i = 0; i < bulletNames.Count; i++)
         {
-            Vector3 xPos = new Vector3(0, -5.7f, 0); // Change this to space bullets equally distant from the left of the grid.
-
-            if (bullets[i] == basic.name)
+            Vector3 xPos = new Vector3((i * 1.11f) - 4f, -5.7f, 0);
+            if (bulletNames[i] == basic.name)
             {
                 Instantiate(basic, xPos, Quaternion.identity);
             }
-            if (bullets[i] == heavy.name)
+            if (bulletNames[i] == heavy.name)
             {
                 Instantiate(heavy, xPos, Quaternion.identity);
             }
-            if (bullets[i] == teleport.name)
+            if (bulletNames[i] == teleport.name)
             {
                 Instantiate(teleport, xPos, Quaternion.identity);
             }
-            if (bullets[i] == time.name)
+            if (bulletNames[i] == time.name)
             {
                 Instantiate(time, xPos, Quaternion.identity);
             }
         }
+        foreach(GameObject bullet in GameObject.FindGameObjectsWithTag("bulletui"))
+        {
+            bullets.Add(bullet);
+        }
+        actions = 2;
     }
 
     // Update is called once per frame
