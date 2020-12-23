@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class BulletMove : MonoBehaviour
 {
-    public GameObject player;
     public string bulletType;
     private float tileLength = 1.11f;
     private float speed = 7f;
+    private bool destroyTime;
     private SpawnManager spawnManagerScript;
     private TeleportManager teleportManagerScript;
     Rigidbody2D rb;
@@ -39,7 +39,7 @@ public class BulletMove : MonoBehaviour
             rb.velocity = new Vector3(-speed, 0, 0);
         }
 
-        if (transform.position.y > 6f || transform.position.y < -6f || transform.position.x > 6f || transform.position.x < -6f)
+        if (transform.position.y > 4f || transform.position.y < -8f || transform.position.x > 4f || transform.position.x < -7f)
         {
             Destroy(gameObject);
         }
@@ -67,17 +67,31 @@ public class BulletMove : MonoBehaviour
             }
             teleportManagerScript.teleport = true;
         }
+
         if (other.CompareTag("enemy") || other.CompareTag("crate"))
         {
             for (int i = 0; i < spawnManagerScript.occupied.Count; i++)
             {
                 if (other.transform.position == spawnManagerScript.occupied[i])
                 {
-                    spawnManagerScript.occupied.RemoveAt(i);
+                    if (bulletType == "time")
+                    {
+                        if (other.transform.position == spawnManagerScript.finalTarget)
+                        {
+                            destroyTime = true;
+                            spawnManagerScript.occupied.RemoveAt(i);
+                            Destroy(other.gameObject);
+                        }
+                    }
+                    else
+                    {
+                        spawnManagerScript.occupied.RemoveAt(i);
+                        Destroy(other.gameObject);
+                    }
                 }
             }
-            Destroy(other.gameObject);
-            if (bulletType != "heavy")
+
+            if (bulletType != "heavy" && destroyTime)
             {
                 Destroy(gameObject);
             }
