@@ -10,6 +10,7 @@ public class BulletMove : MonoBehaviour
     private bool destroyTime;
     private SpawnManager spawnManagerScript;
     private TeleportManager teleportManagerScript;
+    private PauseMenu pauseMenuScript;
     Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
@@ -17,31 +18,35 @@ public class BulletMove : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         teleportManagerScript = GameObject.Find("Teleport Manager").GetComponent<TeleportManager>();
         spawnManagerScript = GameObject.Find("Game Manager").GetComponent<SpawnManager>();
+        pauseMenuScript = GameObject.Find("Pause Menu Canvas").GetComponent<PauseMenu>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((int)transform.eulerAngles.z == 0)
+        if (!pauseMenuScript.gameIsPaused)
         {
-            rb.velocity = new Vector3(0, speed, 0);
-        }
-        if ((int)transform.eulerAngles.z == 180)
-        {
-            rb.velocity = new Vector3(0, -speed, 0);
-        }
-        if ((int)transform.eulerAngles.z == 270)
-        {
-            rb.velocity = new Vector3(speed, 0, 0);
-        }
-        if ((int)transform.eulerAngles.z == 90)
-        {
-            rb.velocity = new Vector3(-speed, 0, 0);
-        }
+            if ((int)transform.eulerAngles.z == 0)
+            {
+                rb.velocity = new Vector3(0, speed, 0);
+            }
+            if ((int)transform.eulerAngles.z == 180)
+            {
+                rb.velocity = new Vector3(0, -speed, 0);
+            }
+            if ((int)transform.eulerAngles.z == 270)
+            {
+                rb.velocity = new Vector3(speed, 0, 0);
+            }
+            if ((int)transform.eulerAngles.z == 90)
+            {
+                rb.velocity = new Vector3(-speed, 0, 0);
+            }
 
-        if (transform.position.y > 4f || transform.position.y < -8f || transform.position.x > 4f || transform.position.x < -7f)
-        {
-            Destroy(gameObject);
+            if (transform.position.y > 4f || transform.position.y < -8f || transform.position.x > 4f || transform.position.x < -7f)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
